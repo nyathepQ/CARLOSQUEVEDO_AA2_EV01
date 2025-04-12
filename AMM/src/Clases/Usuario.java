@@ -15,6 +15,9 @@ public class Usuario extends Persona{
     private String password;
     private final String permisos;
     
+    public Usuario(String permisos){
+        this.permisos = permisos;
+    }
     
     public Usuario(int codigo, String nombres, String apellidos, String contacto, String tipo_ident, String ident, String user, String password, String permisos) {
         super(codigo, nombres, apellidos, contacto);
