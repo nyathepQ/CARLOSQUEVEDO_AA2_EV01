@@ -1,81 +1,109 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Clases;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.sql.Timestamp;
 
 /**
  *
  * @author nyath
  */
 public class Servicio {
-    private String id_servicio;
-    private String cliente;
-    private String direccion;
-    private String equipo;
+    private int id_servicio;
+    private int id_cliente;
+    private int id_equipo;
+    private int id_tipo_limp;
     private LocalDate fecha;
     private LocalTime hora;
-    private String tipo_limp;
-    private int habitaciones;
-    private int baños;
-    private int pasillos;
-    private int pago;
-    private String medio_pago;
-    private String observaciones;
+    private LocalTime tiempo_estimado;
+    private LocalTime tiempo_finalizacion;
+    private int precio;
+    private String observacion;
+    private String user_crea;
+    private Timestamp creado_el;
+    private String user_modifica;
+    private Timestamp modificado_el;
     
-    public Servicio(){
-        
+    //Constructores
+    public Servicio(){        
     }
 
-    public Servicio(String id_servicio, String cliente, String direccion, String equipo, LocalDate fecha, LocalTime hora, String tipo_limp, int habitaciones, int baños, int pasillos, int pago, String medio_pago, String observaciones) {
+    public Servicio(int id_servicio, int id_cliente, int id_equipo, int id_tipo_limp, LocalDate fecha, LocalTime hora, LocalTime tiempo_estimado, LocalTime tiempo_finalizacion, int precio, String observacion, String user_crea, Timestamp creado_el, String user_modifica, Timestamp modificado_el) {
         this.id_servicio = id_servicio;
-        this.cliente = cliente;
-        this.direccion = direccion;
-        this.equipo = equipo;
+        this.id_cliente = id_cliente;
+        this.id_equipo = id_equipo;
+        this.id_tipo_limp = id_tipo_limp;
         this.fecha = fecha;
         this.hora = hora;
-        this.tipo_limp = tipo_limp;
-        this.habitaciones = habitaciones;
-        this.baños = baños;
-        this.pasillos = pasillos;
-        this.pago = pago;
-        this.medio_pago = medio_pago;
-        this.observaciones = observaciones;
+        this.tiempo_estimado = tiempo_estimado;
+        this.tiempo_finalizacion = tiempo_finalizacion;
+        this.precio = precio;
+        this.observacion = observacion;
+        this.user_crea = user_crea;
+        this.creado_el = creado_el;
+        this.user_modifica = user_modifica;
+        this.modificado_el = modificado_el;
     }
 
-    public String getId_servicio() {
+    public Servicio(int id_cliente, int id_equipo, int id_tipo_limp, LocalDate fecha, LocalTime hora, LocalTime tiempo_estimado, LocalTime tiempo_finalizacion, int precio, String observacion, String user_crea) {
+        this.id_cliente = id_cliente;
+        this.id_equipo = id_equipo;
+        this.id_tipo_limp = id_tipo_limp;
+        this.fecha = fecha;
+        this.hora = hora;
+        this.tiempo_estimado = tiempo_estimado;
+        this.tiempo_finalizacion = tiempo_finalizacion;
+        this.precio = precio;
+        this.observacion = observacion;
+        this.user_crea = user_crea;
+    }
+
+    public Servicio(int id_cliente, int id_equipo, int id_tipo_limp, LocalDate fecha, LocalTime hora, LocalTime tiempo_estimado, LocalTime tiempo_finalizacion, int precio, String observacion, String user_modifica, Timestamp modificado_el) {
+        this.id_cliente = id_cliente;
+        this.id_equipo = id_equipo;
+        this.id_tipo_limp = id_tipo_limp;
+        this.fecha = fecha;
+        this.hora = hora;
+        this.tiempo_estimado = tiempo_estimado;
+        this.tiempo_finalizacion = tiempo_finalizacion;
+        this.precio = precio;
+        this.observacion = observacion;
+        this.user_modifica = user_modifica;
+        this.modificado_el = modificado_el;
+    }
+
+    //getters y setters
+
+    public int getId_servicio() {
         return id_servicio;
     }
 
-    public void setId_servicio(String id_servicio) {
+    public void setId_servicio(int id_servicio) {
         this.id_servicio = id_servicio;
     }
 
-    public String getCliente() {
-        return cliente;
+    public int getId_cliente() {
+        return id_cliente;
     }
 
-    public void setCliente(String cliente) {
-        this.cliente = cliente;
+    public void setId_cliente(int id_cliente) {
+        this.id_cliente = id_cliente;
     }
 
-    public String getDireccion() {
-        return direccion;
+    public int getId_equipo() {
+        return id_equipo;
     }
 
-    public void setDireccion(String direccion) {
-        this.direccion = direccion;
+    public void setId_equipo(int id_equipo) {
+        this.id_equipo = id_equipo;
     }
 
-    public String getEquipo() {
-        return equipo;
+    public int getId_tipo_limp() {
+        return id_tipo_limp;
     }
 
-    public void setEquipo(String equipo) {
-        this.equipo = equipo;
+    public void setId_tipo_limp(int id_tipo_limp) {
+        this.id_tipo_limp = id_tipo_limp;
     }
 
     public LocalDate getFecha() {
@@ -94,62 +122,68 @@ public class Servicio {
         this.hora = hora;
     }
 
-    public String getTipo_limp() {
-        return tipo_limp;
+    public LocalTime getTiempo_estimado() {
+        return tiempo_estimado;
     }
 
-    public void setTipo_limp(String tipo_limp) {
-        this.tipo_limp = tipo_limp;
+    public void setTiempo_estimado(LocalTime tiempo_estimado) {
+        this.tiempo_estimado = tiempo_estimado;
     }
 
-    public int getHabitaciones() {
-        return habitaciones;
+    public LocalTime getTiempo_finalizacion() {
+        return tiempo_finalizacion;
     }
 
-    public void setHabitaciones(int habitaciones) {
-        this.habitaciones = habitaciones;
+    public void setTiempo_finalizacion(LocalTime tiempo_finalizacion) {
+        this.tiempo_finalizacion = tiempo_finalizacion;
     }
 
-    public int getBaños() {
-        return baños;
+    public int getPrecio() {
+        return precio;
     }
 
-    public void setBaños(int baños) {
-        this.baños = baños;
+    public void setPrecio(int precio) {
+        this.precio = precio;
     }
 
-    public int getPasillos() {
-        return pasillos;
+    public String getObservacion() {
+        return observacion;
     }
 
-    public void setPasillos(int pasillos) {
-        this.pasillos = pasillos;
+    public void setObservacion(String observacion) {
+        this.observacion = observacion;
     }
 
-    public int getPago() {
-        return pago;
+    public String getUser_crea() {
+        return user_crea;
     }
 
-    public void setPago(int pago) {
-        this.pago = pago;
+    public void setUser_crea(String user_crea) {
+        this.user_crea = user_crea;
     }
 
-    public String getMedio_pago() {
-        return medio_pago;
+    public Timestamp getCreado_el() {
+        return creado_el;
     }
 
-    public void setMedio_pago(String medio_pago) {
-        this.medio_pago = medio_pago;
+    public void setCreado_el(Timestamp creado_el) {
+        this.creado_el = creado_el;
     }
 
-    public String getObservaciones() {
-        return observaciones;
+    public String getUser_modifica() {
+        return user_modifica;
     }
 
-    public void setObservaciones(String observaciones) {
-        this.observaciones = observaciones;
+    public void setUser_modifica(String user_modifica) {
+        this.user_modifica = user_modifica;
     }
-    
-    
+
+    public Timestamp getModificado_el() {
+        return modificado_el;
+    }
+
+    public void setModificado_el(Timestamp modificado_el) {
+        this.modificado_el = modificado_el;
+    }
     
 }

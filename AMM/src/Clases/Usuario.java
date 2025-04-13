@@ -1,47 +1,53 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Clases;
+
+import java.sql.Timestamp;
 
 /**
  *
  * @author nyath
  */
 public class Usuario extends Persona{
-    private String tipo_ident;
-    private String ident;
-    private String user ;
+    private int tipo_user;
+    private String user;
     private String password;
-    private final String permisos;
+    private int tipo_docu;
     
-    public Usuario(String permisos){
-        this.permisos = permisos;
+    //constructores
+    public Usuario() {
     }
     
-    public Usuario(int codigo, String nombres, String apellidos, String contacto, String tipo_ident, String ident, String user, String password, String permisos) {
-        super(codigo, nombres, apellidos, contacto);
-        this.tipo_ident = tipo_ident;
-        this.ident = ident;
+    public Usuario(int tipo_user, String user, String password, int tipo_docu, String nombres, String apellidos, String telefono, String email, String user_crea) {
+        super(nombres, apellidos, telefono, email, user_crea);
+        this.tipo_user = tipo_user;
         this.user = user;
         this.password = password;
-        this.permisos = permisos;
+        this.tipo_docu = tipo_docu;
     }
 
-    public String getTipo_ident() {
-        return tipo_ident;
+    public Usuario(int tipo_user, String user, String password, int tipo_docu, String nombres, String apellidos, String telefono, String email, String user_modifica, Timestamp modificado_el) {
+        super(nombres, apellidos, telefono, email, user_modifica, modificado_el);
+        this.tipo_user = tipo_user;
+        this.user = user;
+        this.password = password;
+        this.tipo_docu = tipo_docu;
     }
 
-    public void setTipo_ident(String tipo_ident) {
-        this.tipo_ident = tipo_ident;
+    public Usuario(int tipo_user, String user, String password, int tipo_docu, String codigo, String nombres, String apellidos, String telefono, String email, String user_crea, Timestamp creado_el, String user_modifica, Timestamp modificado_el) {
+        super(codigo, nombres, apellidos, telefono, email, user_crea, creado_el, user_modifica, modificado_el);
+        this.tipo_user = tipo_user;
+        this.user = user;
+        this.password = password;
+        this.tipo_docu = tipo_docu;
+    }
+    
+    //getters y setters
+
+    public int getTipo_user() {
+        return tipo_user;
     }
 
-    public String getIdent() {
-        return ident;
-    }
-
-    public void setIdent(String ident) {
-        this.ident = ident;
+    public void setTipo_user(int tipo_user) {
+        this.tipo_user = tipo_user;
     }
 
     public String getUser() {
@@ -60,7 +66,12 @@ public class Usuario extends Persona{
         this.password = password;
     }
 
-    public String getPermisos() {
-        return permisos;
-    }   
+    public int getTipo_docu() {
+        return tipo_docu;
+    }
+
+    public void setTipo_docu(int tipo_docu) {
+        this.tipo_docu = tipo_docu;
+    }
+    
 }
