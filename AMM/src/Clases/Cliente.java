@@ -1,7 +1,3 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 package Clases;
 
 import java.sql.Timestamp;
@@ -12,24 +8,28 @@ import java.sql.Timestamp;
  */
 public class Cliente extends Persona {
     //atributos
+    private String direccion;
     private String observaciones;
         
     //constructores
     public Cliente() {
     }
 
-    public Cliente(String observaciones, String nombres, String apellidos, String telefono, String email, String user_crea) {
+    public Cliente(String direccion, String observaciones, String nombres, String apellidos, String telefono, String email, String user_crea) {
         super(nombres, apellidos, telefono, email, user_crea);
+        this.direccion = direccion;
         this.observaciones = observaciones;
     }
 
-    public Cliente(String observaciones, String nombres, String apellidos, String telefono, String email, String user_modifica, Timestamp modificado_el) {
+    public Cliente(String direccion, String observaciones, String nombres, String apellidos, String telefono, String email, String user_modifica, Timestamp modificado_el) {
         super(nombres, apellidos, telefono, email, user_modifica, modificado_el);
+        this.direccion = direccion;
         this.observaciones = observaciones;
     }
 
-    public Cliente(String observaciones, String codigo, String nombres, String apellidos, String telefono, String email, String user_crea, Timestamp creado_el, String user_modifica, Timestamp modificado_el) {
+    public Cliente(String direccion, String observaciones, String codigo, String nombres, String apellidos, String telefono, String email, String user_crea, Timestamp creado_el, String user_modifica, Timestamp modificado_el) {
         super(codigo, nombres, apellidos, telefono, email, user_crea, creado_el, user_modifica, modificado_el);
+        this.direccion = direccion;
         this.observaciones = observaciones;
     }
     
@@ -41,6 +41,14 @@ public class Cliente extends Persona {
 
     public void setObservaciones(String observaciones) {
         this.observaciones = observaciones;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
     }
     
 }

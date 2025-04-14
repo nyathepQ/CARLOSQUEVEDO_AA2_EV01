@@ -32,7 +32,7 @@ public class VariosManager {
         }
     }
     
-    public Varios buscarTipoDocu (String codigo_b) {
+    public Varios buscarTipoDocu (int codigo_b) {
         Connection cx = ConexionBD.getConnection();
         Varios vr = null;
         
@@ -41,7 +41,7 @@ public class VariosManager {
             
             try {
                 PreparedStatement stat = cx.prepareStatement(sql);
-                stat.setString(1, codigo_b);
+                stat.setInt(1, codigo_b);
                 ResultSet rs = stat.executeQuery();
                 
                 if(rs.next()) {
@@ -65,7 +65,7 @@ public class VariosManager {
     }
     
     public boolean modificarTipoDocu (Varios tipo_docu){
-        String sql = "UPDATE tipo_documento SET nombre_tipo = ?, user_modifica = ?, modificado_el = ?";
+        String sql = "UPDATE tipo_documento SET nombre_tipo = ?, user_modifica = ?, modificado_el = ? WHERE id_tipoDocu = ?";
         
         try (Connection cx = ConexionBD.getConnection();
                 PreparedStatement stat = cx.prepareStatement(sql)){
@@ -73,6 +73,7 @@ public class VariosManager {
             stat.setString(1, tipo_docu.getNombre());
             stat.setString(2, tipo_docu.getUser_modifica());
             stat.setTimestamp(3, tipo_docu.getModificado_el());
+            stat.setInt(4, tipo_docu.getCodigo());
             
             int filas_afec = stat.executeUpdate();
             return filas_afec > 0;
@@ -149,7 +150,7 @@ public class VariosManager {
     }
     
     public boolean modificarTipoLimp (Varios tipo_limp){
-        String sql = "UPDATE tipo_limpieza SET nombre_tipo = ?, user_modifica = ?, modificado_el = ?";
+        String sql = "UPDATE tipo_limpieza SET nombre_tipo = ?, user_modifica = ?, modificado_el = ? WHERE id_tipoLimp = ?";
         
         try (Connection cx = ConexionBD.getConnection();
                 PreparedStatement stat = cx.prepareStatement(sql)){
@@ -157,6 +158,7 @@ public class VariosManager {
             stat.setString(1, tipo_limp.getNombre());
             stat.setString(2, tipo_limp.getUser_modifica());
             stat.setTimestamp(3, tipo_limp.getModificado_el());
+            stat.setInt(4, tipo_limp.getCodigo());
             
             int filas_afec = stat.executeUpdate();
             return filas_afec > 0;
@@ -176,7 +178,7 @@ public class VariosManager {
             int filas_afec = stat.executeUpdate();
             
             return filas_afec > 0;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }

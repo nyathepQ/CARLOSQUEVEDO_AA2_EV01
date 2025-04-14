@@ -11,33 +11,37 @@ public class Usuario extends Persona{
     private String user;
     private String password;
     private int tipo_docu;
+    private String documento;
     
     //constructores
     public Usuario() {
     }
     
-    public Usuario(int tipo_user, String user, String password, int tipo_docu, String nombres, String apellidos, String telefono, String email, String user_crea) {
+    public Usuario(int tipo_user, String user, String password, int tipo_docu, String documento, String nombres, String apellidos, String telefono, String email, String user_crea) {
         super(nombres, apellidos, telefono, email, user_crea);
         this.tipo_user = tipo_user;
         this.user = user;
         this.password = password;
         this.tipo_docu = tipo_docu;
+        this.documento = documento;
     }
 
-    public Usuario(int tipo_user, String user, String password, int tipo_docu, String nombres, String apellidos, String telefono, String email, String user_modifica, Timestamp modificado_el) {
+    public Usuario(int tipo_user, String user, String password, int tipo_docu, String documento, String nombres, String apellidos, String telefono, String email, String user_modifica, Timestamp modificado_el) {
         super(nombres, apellidos, telefono, email, user_modifica, modificado_el);
         this.tipo_user = tipo_user;
         this.user = user;
         this.password = password;
         this.tipo_docu = tipo_docu;
+        this.documento = documento;
     }
 
-    public Usuario(int tipo_user, String user, String password, int tipo_docu, String codigo, String nombres, String apellidos, String telefono, String email, String user_crea, Timestamp creado_el, String user_modifica, Timestamp modificado_el) {
+    public Usuario(int tipo_user, String user, String password, int tipo_docu, String documento, String codigo, String nombres, String apellidos, String telefono, String email, String user_crea, Timestamp creado_el, String user_modifica, Timestamp modificado_el) {
         super(codigo, nombres, apellidos, telefono, email, user_crea, creado_el, user_modifica, modificado_el);
         this.tipo_user = tipo_user;
         this.user = user;
         this.password = password;
         this.tipo_docu = tipo_docu;
+        this.documento = documento;
     }
     
     //getters y setters
@@ -73,5 +77,12 @@ public class Usuario extends Persona{
     public void setTipo_docu(int tipo_docu) {
         this.tipo_docu = tipo_docu;
     }
-    
+
+    public String getDocumento() {
+        return documento;
+    }
+
+    public void setDocumento(String documento) {
+        this.documento = documento;
+    }    
 }

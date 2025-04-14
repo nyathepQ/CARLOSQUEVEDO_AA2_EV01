@@ -3,15 +3,18 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/nyath/Documents/NetBeansProjects/AMM/src/amm/AMM.java</file>
-            <file>file:/C:/Users/nyath/Documents/NetBeansProjects/AMM/src/Clases/Persona.java</file>
-            <file>file:/C:/Users/nyath/Documents/NetBeansProjects/AMM/src/Clases/Cliente.java</file>
-            <file>file:/C:/Users/nyath/Documents/NetBeansProjects/AMM/src/Clases/Usuario.java</file>
-            <file>file:/C:/Users/nyath/Documents/NetBeansProjects/AMM/src/Clases/Empleado.java</file>
-            <file>file:/C:/Users/nyath/Documents/NetBeansProjects/AMM/src/Clases/Administrador.java</file>
-            <file>file:/C:/Users/nyath/Documents/NetBeansProjects/AMM/src/Clases/EquipoTrabajo.java</file>
-            <file>file:/C:/Users/nyath/Documents/NetBeansProjects/AMM/src/Clases/Servicio.java</file>
-            <file>file:/C:/Users/nyath/Documents/NetBeansProjects/AMM/src/Clases/Coordinador.java</file>
+            <file>file:/C:/Users/nyath/Documents/Git%20proyects/CARLOSQUEVEDO_AA2_EV01/AMM/src/amm/AMM.java</file>
+            <file>file:/C:/Users/nyath/Documents/Git%20proyects/CARLOSQUEVEDO_AA2_EV01/AMM/src/Clases/Varios.java</file>
+            <file>file:/C:/Users/nyath/Documents/Git%20proyects/CARLOSQUEVEDO_AA2_EV01/AMM/src/Servicios/VariosManager.java</file>
+            <file>file:/C:/Users/nyath/Documents/Git%20proyects/CARLOSQUEVEDO_AA2_EV01/AMM/src/Clases/Cliente.java</file>
+            <file>file:/C:/Users/nyath/Documents/Git%20proyects/CARLOSQUEVEDO_AA2_EV01/AMM/src/Servicios/ClienteManager.java</file>
+            <file>file:/C:/Users/nyath/Documents/Git%20proyects/CARLOSQUEVEDO_AA2_EV01/AMM/src/Clases/Usuario.java</file>
+            <file>file:/C:/Users/nyath/Documents/Git%20proyects/CARLOSQUEVEDO_AA2_EV01/AMM/src/Servicios/UsuarioManager.java</file>
+            <file>file:/C:/Users/nyath/Documents/Git%20proyects/CARLOSQUEVEDO_AA2_EV01/AMM/src/Clases/EquipoTrabajo.java</file>
+            <file>file:/C:/Users/nyath/Documents/Git%20proyects/CARLOSQUEVEDO_AA2_EV01/AMM/src/Servicios/EquipoTrabajoManager.java</file>
+            <file>file:/C:/Users/nyath/Documents/Git%20proyects/CARLOSQUEVEDO_AA2_EV01/AMM/src/Clases/Servicio.java</file>
+            <file>file:/C:/Users/nyath/Documents/Git%20proyects/CARLOSQUEVEDO_AA2_EV01/AMM/src/Servicios/ServicioManager.java</file>
+            <file>file:/C:/Users/nyath/Documents/Git%20proyects/CARLOSQUEVEDO_AA2_EV01/AMM/src/Utils/TimeUtils.java</file>
         </group>
     </open-files>
 </project-private>
