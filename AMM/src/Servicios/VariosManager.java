@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import Clases.ConexionBD;
 import Clases.Varios;
 import java.sql.Timestamp;
+import java.util.List;
+import java.util.ArrayList;
 
 /**
  *
@@ -14,15 +16,18 @@ import java.sql.Timestamp;
  */
 public class VariosManager {
     
-    //tipo_documento
-    public boolean insertTipoDocu (Varios tipo_docu) {
-        String sql = "INSERT INTO tipo_documento (nombre_tipo, user_crea) VALUES (?, ?)";
+    /*
+    nombre_tabla = tipo_documento - tipo_limpieza - tipo_usuario
+    col_name_id = id_tipoDocu - id_tipoLimp - id_tipoUsua
+    */
+    public boolean insertTipoVarios (String nombre_tabla, Varios tipo) {
+        String sql = "INSERT INTO " + nombre_tabla + " (nombre_tipo, user_crea) VALUES (?, ?)";
         
         try (Connection cx = ConexionBD.getConnection();
             PreparedStatement stat = cx.prepareStatement(sql)){
             
-            stat.setString(1, tipo_docu.getNombre());
-            stat.setString(2, tipo_docu.getUser_crea());
+            stat.setString(1, tipo.getNombre());
+            stat.setString(2, tipo.getUser_crea());
             
             int filas_afec = stat.executeUpdate();
             return filas_afec > 0;
@@ -32,12 +37,12 @@ public class VariosManager {
         }
     }
     
-    public Varios buscarTipoDocu (int codigo_b) {
+    public Varios buscarTipoVarios (String nombre_tabla, String col_name_id, int codigo_b) {
         Connection cx = ConexionBD.getConnection();
         Varios vr = null;
         
         if(cx != null) {
-            String sql = "SELECT * FROM tipo_documento WHERE id_tipoDocu = ?";
+            String sql = "SELECT * FROM " + nombre_tabla + " WHERE " + col_name_id + " = ?";
             
             try {
                 PreparedStatement stat = cx.prepareStatement(sql);
@@ -45,7 +50,7 @@ public class VariosManager {
                 ResultSet rs = stat.executeQuery();
                 
                 if(rs.next()) {
-                    int codigo = rs.getInt("id_tipoDocu");
+                    int codigo = rs.getInt(col_name_id);
                     String nombre = rs.getString("nombre_tipo");
                     String user_crea = rs.getString("user_crea");
                     Timestamp creado_el = rs.getTimestamp("creado_el");
@@ -64,8 +69,42 @@ public class VariosManager {
         return vr;
     }
     
-    public boolean modificarTipoDocu (Varios tipo_docu){
-        String sql = "UPDATE tipo_documento SET nombre_tipo = ?, user_modifica = ?, modificado_el = ? WHERE id_tipoDocu = ?";
+    public Varios[] getAllTipoVarios (String nombre_tabla, String col_name_id){
+        Connection cx = ConexionBD.getConnection();
+        List<Varios> vr = new ArrayList<>();
+        
+        if(cx != null) {
+            String sql = "SELECT * FROM " + nombre_tabla;
+            
+            
+            try{
+                PreparedStatement stat = cx.prepareStatement(sql);
+                
+                ResultSet rs = stat.executeQuery();
+                
+                while(rs.next()){
+                    int codigo = rs.getInt(col_name_id);
+                    String nombre = rs.getString("nombre_tipo");
+                    String user_crea = rs.getString("user_crea");
+                    Timestamp creado_el = rs.getTimestamp("creado_el");
+                    String user_modifica = rs.getString("user_modifica");
+                    Timestamp modificado_el = rs.getTimestamp("modificado_el");
+                    Varios prov = new Varios(codigo, nombre, user_crea, creado_el, user_modifica, modificado_el);
+                    
+                    vr.add(prov);                    
+                }
+                
+                cx.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return vr.toArray(new Varios[0]);
+    }
+    
+    public boolean modificarTipoVarios (String nombre_tabla, String col_name_id, Varios tipo_docu){
+        String sql = "UPDATE " + nombre_tabla + " SET nombre_tipo = ?, user_modifica = ?, modificado_el = ? WHERE " + col_name_id + " = ?";
         
         try (Connection cx = ConexionBD.getConnection();
                 PreparedStatement stat = cx.prepareStatement(sql)){
@@ -83,8 +122,8 @@ public class VariosManager {
         }
     }
     
-    public boolean eliminarTipoDocu (int codigo) {
-        String sql = "DELETE FROM tipo_documento WHERE id_tipoDocu = ?";
+    public boolean eliminarTipoVarios (String nombre_tabla, String col_name_id, int codigo) {
+        String sql = "DELETE FROM " + nombre_tabla + " WHERE " + col_name_id + " = ?";
         
         try (Connection cx = ConexionBD.getConnection();
                 PreparedStatement stat = cx.prepareStatement(sql)){
@@ -97,123 +136,5 @@ public class VariosManager {
             e.printStackTrace();
             return false;
         }
-    }
-    
-    //tipo_limpieza
-    public boolean insertTipoLimp (Varios tipo_limp) {
-        String sql = "INSERT INTO tipo_limpieza (nombre_tipo, user_crea) VALUES (?, ?)";
-        
-        try (Connection cx = ConexionBD.getConnection();
-            PreparedStatement stat = cx.prepareStatement(sql)){
-            
-            stat.setString(1, tipo_limp.getNombre());
-            stat.setString(2, tipo_limp.getUser_crea());
-            
-            int filas_afec = stat.executeUpdate();
-            return filas_afec > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-    
-    public Varios buscarTipoLimp (String codigo_b) {
-        Connection cx = ConexionBD.getConnection();
-        Varios vr = null;
-        
-        if(cx != null) {
-            String sql = "SELECT * FROM tipo_limpieza WHERE id_tipoLimp = ?";
-            
-            try {
-                PreparedStatement stat = cx.prepareStatement(sql);
-                stat.setString(1, codigo_b);
-                ResultSet rs = stat.executeQuery();
-                
-                if(rs.next()) {
-                    int codigo = rs.getInt("id_tipoLimp");
-                    String nombre = rs.getString("nombre_tipo");
-                    String user_crea = rs.getString("user_crea");
-                    Timestamp creado_el = rs.getTimestamp("creado_el");
-                    String user_modifica = rs.getString("user_modifica");
-                    Timestamp modificado_el = rs.getTimestamp("modificado_el");
-                    
-                    vr = new Varios(codigo, nombre, user_crea, creado_el, user_modifica, modificado_el);
-                }
-                
-                cx.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        
-        return vr;
-    }
-    
-    public boolean modificarTipoLimp (Varios tipo_limp){
-        String sql = "UPDATE tipo_limpieza SET nombre_tipo = ?, user_modifica = ?, modificado_el = ? WHERE id_tipoLimp = ?";
-        
-        try (Connection cx = ConexionBD.getConnection();
-                PreparedStatement stat = cx.prepareStatement(sql)){
-            
-            stat.setString(1, tipo_limp.getNombre());
-            stat.setString(2, tipo_limp.getUser_modifica());
-            stat.setTimestamp(3, tipo_limp.getModificado_el());
-            stat.setInt(4, tipo_limp.getCodigo());
-            
-            int filas_afec = stat.executeUpdate();
-            return filas_afec > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-    
-    public boolean eliminarTipoLimp (int codigo) {
-        String sql = "DELETE FROM tipo_limpieza WHERE id_tipoLimp = ?";
-        
-        try (Connection cx = ConexionBD.getConnection();
-                PreparedStatement stat = cx.prepareStatement(sql)){
-            
-            stat.setInt(1, codigo);
-            int filas_afec = stat.executeUpdate();
-            
-            return filas_afec > 0;
-        } catch (SQLException e) {
-            e.printStackTrace();
-            return false;
-        }
-    }
-    
-    //tipo_usuario
-    public Varios buscarTipoUsua (String codigo_b) {
-        Connection cx = ConexionBD.getConnection();
-        Varios vr = null;
-        
-        if(cx != null) {
-            String sql = "SELECT * FROM tipo_usuario WHERE id_tipoUsua = ?";
-            
-            try {
-                PreparedStatement stat = cx.prepareStatement(sql);
-                stat.setString(1, codigo_b);
-                ResultSet rs = stat.executeQuery();
-                
-                if(rs.next()) {
-                    int codigo = rs.getInt("id_tipoUsua");
-                    String nombre = rs.getString("nombre_tipo");
-                    String user_crea = rs.getString("user_crea");
-                    Timestamp creado_el = rs.getTimestamp("creado_el");
-                    String user_modifica = rs.getString("user_modifica");
-                    Timestamp modificado_el = rs.getTimestamp("modificado_el");
-                    
-                    vr = new Varios(codigo, nombre, user_crea, creado_el, user_modifica, modificado_el);
-                }
-                
-                cx.close();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        
-        return vr;
-    }
+    }   
 }
