@@ -7,7 +7,7 @@ import java.time.LocalTime;
 import java.time.Duration;
 
 public class TimeUtils {
-    public static LocalTime calcHoraFinalizacion(LocalTime hora_inicial, LocalTime duracion){
+    public LocalTime calcHoraFinalizacion(LocalTime hora_inicial, LocalTime duracion){
         //convertir la hora a sumar en Duration
         Duration tiempo_sum = Duration.ofHours(duracion.getHour()).plusMinutes(duracion.getMinute());
         //retornar la suma de Duration a la hora inicial

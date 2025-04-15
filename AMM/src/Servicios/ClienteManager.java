@@ -7,6 +7,8 @@ import java.sql.SQLException;
 import Clases.ConexionBD;
 import Clases.Cliente;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -74,6 +76,46 @@ public class ClienteManager {
         return cl;
     }
     
+    public Cliente[] getAllCliente () {
+        Connection cx = ConexionBD.getConnection();
+        List<Cliente> cl = new ArrayList<>();
+        
+        if(cx != null) {
+            String sql = "SELECT * FROM cliente";
+            
+            try {
+                PreparedStatement stat = cx.prepareStatement(sql);
+                
+                ResultSet rs = stat.executeQuery();
+                
+                if(rs.next()) {
+                    int codigo = rs.getInt("id_cliente");
+                    String nombre = rs.getString("nombre_cliente");
+                    String apellido = rs.getString("apellido_cliente");
+                    String direccion = rs.getString("direccion_cliente");
+                    String telefono = rs.getString("telefono_cliente");
+                    String correo = rs.getString("correo_cliente");
+                    String observacion = rs.getString("observacion_cliente");
+                    String user_crea = rs.getString("user_crea");
+                    Timestamp creado_el = rs.getTimestamp("creado_el");
+                    String user_modifica = rs.getString("user_modifica");
+                    Timestamp modificado_el = rs.getTimestamp("modificado_el");
+                    
+                    String codigotxt = String.valueOf(codigo);
+                    
+                    Cliente temp = new Cliente(direccion, observacion, codigotxt, nombre, apellido, telefono, correo, user_crea, creado_el, user_modifica, modificado_el);
+                    cl.add(temp);
+                }
+                
+                cx.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return cl.toArray(new Cliente[0]);
+    }
+    
     public boolean modificarCliente (Cliente cliente) {
         String sql = "UPDATE cliente SET nombre_cliente = ?, apellido_cliente = ?, direccion_cliente = ?, telefono_cliente = ?, correo_cliente = ?, observacion_cliente = ?, user_modifica = ?, modificado_el = ? WHERE id_cliente = ?";
         
@@ -115,5 +157,9 @@ public class ClienteManager {
             e.printStackTrace();
             return false;
         }
+    }
+    
+    public String ClienteToString(Cliente cliente) {
+        return cliente.getNombres() + " " + cliente.getApellidos();
     }
 }

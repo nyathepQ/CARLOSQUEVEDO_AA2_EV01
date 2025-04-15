@@ -11,6 +11,8 @@ import java.sql.SQLException;
 import Clases.ConexionBD;
 import Clases.Usuario;
 import java.sql.Timestamp;
+import java.util.ArrayList;
+import java.util.List;
 
 public class UsuarioManager {
     public boolean insertUsuario(Usuario user){
@@ -77,6 +79,47 @@ public class UsuarioManager {
         return us;
     }
     
+    public Usuario[] getAllUsuario () {
+        Connection cx = ConexionBD.getConnection();
+        List<Usuario> us = new ArrayList<>();
+        
+        if(cx != null) {
+            String sql = "SELECT * FROM usuario";
+            
+            try {
+                PreparedStatement stat = cx.prepareStatement(sql);
+                
+                ResultSet rs = stat.executeQuery();
+                
+                if(rs.next()) {
+                    String id_usuario = rs.getString("id_usuario");
+                    int id_tipoUsua = rs.getInt("id_tipoUsua");
+                    String nombre_usuario = rs.getString("nombre_usuario");
+                    String contrasena_usuario = rs.getString("contrasena_usuario");
+                    int id_tipoDocu = rs.getInt("id_tipoDocu");
+                    String documento_usuario = rs.getString("documento_usuario");
+                    String nombres = rs.getString("nombres");
+                    String apellidos = rs.getString("apellidos");
+                    String telefono_usuario = rs.getString("telefono_usuario");
+                    String correo_usuario = rs.getString("correo_usuario");
+                    String user_crea = rs.getString("user_crea");
+                    Timestamp creado_el = rs.getTimestamp("creado_el");
+                    String user_modifica = rs.getString("user_modifica");
+                    Timestamp modificado_el = rs.getTimestamp("modificado_el");
+                    
+                    Usuario temp = new Usuario(id_tipoUsua, nombre_usuario, contrasena_usuario, id_tipoDocu, documento_usuario, id_usuario, nombres, apellidos, telefono_usuario, correo_usuario, user_crea, creado_el, user_modifica, modificado_el);
+                    us.add(temp);
+                }
+                
+                cx.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return us.toArray(new Usuario[0]);
+    }
+    
     public boolean modificarUsuario (Usuario usuario) {
         String sql = "UPDATE usuario SET id_tipoUsua = ?, nombre_usuario = ?, contrasena_usuario = ?, id_tipoDocu = ?, documento_usuario = ?, nombres = ?, apellidos = ?, telefono_usuario = ?, correo_usuario = ?, user_modifica = ?, modificado_el = ? WHERE id_usuario = ?";
         
@@ -118,5 +161,9 @@ public class UsuarioManager {
             e.printStackTrace();
             return false;
         }
+    }
+    
+    public String UsuarioToString (Usuario user){
+        return user.getNombres() + " " + user.getApellidos();
     }
 }

@@ -158,4 +158,4 @@ CREATE TABLE servicio (
 
 INSERT IGNORE INTO usuario (
 id_tipoUsua, nombre_usuario, contrasena_usuario, id_tipoDocu, documento_usuario, nombres, apellidos, telefono_usuario, correo_usuario
-) VALUES (1, 'Admin', '1234', 1, '1026571230', 'Carlos', 'Quevedo', '3212300716', 'nyathepq@gmail.com');
+) VALUES (3, 'Vacio', '0', 1, '0', 'Seleccionar', 'Usuario', '0', '0@gmail.com'), (1, 'Admin', '1234', 1, '1026571230', 'Carlos', 'Quevedo', '3212300716', 'nyathepq@gmail.com');

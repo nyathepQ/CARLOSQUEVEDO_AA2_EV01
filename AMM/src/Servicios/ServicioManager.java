@@ -12,6 +12,8 @@ import Clases.Servicio;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ServicioManager {
     public boolean insertServicio(Servicio service){
@@ -38,7 +40,7 @@ public class ServicioManager {
         }
     }
     
-    public Servicio buscarServicio (String codigo_b) {
+    public Servicio buscarServicio (int codigo_b) {
         Connection cx = ConexionBD.getConnection();
         Servicio serv = null;
         
@@ -47,7 +49,7 @@ public class ServicioManager {
             
             try {
                 PreparedStatement stat = cx.prepareStatement(sql);
-                stat.setString(1, codigo_b);
+                stat.setInt(1, codigo_b);
                 ResultSet rs = stat.executeQuery();
                 
                 if(rs.next()) {
@@ -76,6 +78,48 @@ public class ServicioManager {
         }
         
         return serv;
+    }
+    
+    public static Servicio[] getAllFechaServicio (LocalDate fecha_b) {
+        Connection cx = ConexionBD.getConnection();
+        List<Servicio> serv = new ArrayList<>();
+        
+        if(cx != null) {
+            String sql = "SELECT * FROM servicio WHERE fecha = ?";
+            
+            try {
+                PreparedStatement stat = cx.prepareStatement(sql);
+                stat.setDate(1, java.sql.Date.valueOf(fecha_b));
+                ResultSet rs = stat.executeQuery();
+                
+                if(rs.next()) {
+                    int id_servicio = rs.getInt("id_servicio");
+                    int id_cliente = rs.getInt("id_cliente");
+                    int id_equipo = rs.getInt("id_equipo");
+                    int id_tipoLimp = rs.getInt("id_tipoLimp");
+                    LocalDate fecha = rs.getDate("fecha").toLocalDate();
+                    LocalTime hora = rs.getTime("hora").toLocalTime();
+                    LocalTime tiempo_estimado = rs.getTime("tiempo_estimado").toLocalTime();
+                    LocalTime tiempo_finalizacion = rs.getTime("tiempo_finalizacion").toLocalTime();
+                    int precio = rs.getInt("precio");
+                    String observacion = rs.getString("observacion");
+                    String user_crea = rs.getString("user_crea");
+                    Timestamp creado_el = rs.getTimestamp("creado_el");
+                    String user_modifica = rs.getString("user_modifica");
+                    Timestamp modificado_el = rs.getTimestamp("modificado_el");
+                    
+                    Servicio temp = new Servicio(id_servicio, id_cliente, id_equipo, id_tipoLimp, fecha, hora, tiempo_estimado, tiempo_finalizacion, precio, observacion, user_crea, creado_el, user_modifica, modificado_el);
+                    
+                    serv.add(temp);
+                }
+                
+                cx.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return serv.toArray(new Servicio[0]);
     }
     
     public boolean modificarServicio (Servicio servicio) {

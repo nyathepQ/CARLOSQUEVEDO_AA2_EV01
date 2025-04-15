@@ -7,7 +7,6 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -140,6 +139,68 @@ public class EquipoTrabajoManager {
         }
         
         return eq;
+    }
+    
+    public EquipoTrabajo[] getAllEquipo () {
+        Connection cx = ConexionBD.getConnection();
+        List<EquipoTrabajo> equi = new ArrayList<>();
+        
+        if(cx != null) {
+            String sql1 = "SELECT * FROM equipo";
+            String sql2 = "SELECT id_equipo, id_usuario, es_lider FROM usuarios_equipo WHERE id_equipo = ?";
+            
+            try {
+                //consulta tabla equipo
+                PreparedStatement stat1 = cx.prepareStatement(sql1);                
+                
+                ResultSet rs1 = stat1.executeQuery();
+                
+                if(rs1.next()) {
+                    EquipoTrabajo temp = new EquipoTrabajo();
+                    temp.setCodigo(rs1.getInt("id_equipo"));
+                    temp.setNombre_equipo(rs1.getString("nombre_equipo"));
+                    temp.setUser_crea(rs1.getString("user_crea"));
+                    temp.setCreado_el(rs1.getTimestamp("creado_el"));
+                    temp.setUser_modifica(rs1.getString("user_modifica"));
+                    temp.setModificado_el(rs1.getTimestamp("modificado_el"));
+                    
+                    //consulta tabla usuarios_equipo
+                    PreparedStatement stat2 = cx.prepareStatement(sql2);
+                    stat2.setInt(1, temp.getCodigo());
+                    ResultSet rs2 = stat2.executeQuery();
+                    
+                    int contador = 0;
+                    
+                    while(rs2.next()) {
+                        String idUser = rs2.getString("id_usuario");
+                        boolean esLider = rs2.getBoolean("es_lider");
+                        
+                        if(esLider){
+                            temp.setLider(idUser);
+                        } else {
+                            contador++;
+                            if (contador == 1){
+                                temp.setMiembro1(idUser);
+                            } else if (contador == 2) {
+                                temp.setMiembro2(idUser);
+                            }
+                        }
+                    }
+                    
+                    equi.add(temp);
+                    rs2.close();
+                    stat2.close();
+                }
+                
+                rs1.close();
+                stat1.close();
+                cx.close();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        return equi.toArray(new EquipoTrabajo[0]);
     }
     
     public boolean modificarEquipo (EquipoTrabajo equipo) {
