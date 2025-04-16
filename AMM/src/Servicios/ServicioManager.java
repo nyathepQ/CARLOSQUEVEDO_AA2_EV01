@@ -13,6 +13,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 public class ServicioManager {
@@ -80,19 +81,19 @@ public class ServicioManager {
         return serv;
     }
     
-    public static Servicio[] getAllFechaServicio (LocalDate fecha_b) {
+    public static Servicio[] getAllServicio () {
         Connection cx = ConexionBD.getConnection();
         List<Servicio> serv = new ArrayList<>();
         
         if(cx != null) {
-            String sql = "SELECT * FROM servicio WHERE fecha = ?";
+            String sql = "SELECT * FROM servicio";
             
             try {
                 PreparedStatement stat = cx.prepareStatement(sql);
-                stat.setDate(1, java.sql.Date.valueOf(fecha_b));
+                
                 ResultSet rs = stat.executeQuery();
                 
-                if(rs.next()) {
+                while(rs.next()) {
                     int id_servicio = rs.getInt("id_servicio");
                     int id_cliente = rs.getInt("id_cliente");
                     int id_equipo = rs.getInt("id_equipo");
@@ -163,5 +164,28 @@ public class ServicioManager {
             e.printStackTrace();
             return false;
         }
+    }
+    
+    public Object[][] toTableObject (Servicio[] servicio){
+        Object[][] datos = new Object[servicio.length][14];
+        
+        for (int i = 0; i < servicio.length; i++) {
+            datos[i][0] = servicio[i].getId_servicio();
+            datos[i][1] = servicio[i].getId_cliente();
+            datos[i][2] = servicio[i].getId_equipo();
+            datos[i][3] = servicio[i].getId_tipo_limp();
+            datos[i][4] = servicio[i].getFecha();
+            datos[i][5] = servicio[i].getHora();
+            datos[i][6] = servicio[i].getTiempo_estimado();
+            datos[i][7] = servicio[i].getTiempo_finalizacion();
+            datos[i][8] = servicio[i].getPrecio();
+            datos[i][9] = servicio[i].getObservacion();
+            datos[i][10] = servicio[i].getUser_crea();
+            datos[i][11] = servicio[i].getCreado_el();
+            datos[i][12] = servicio[i].getUser_modifica();
+            datos[i][13] = servicio[i].getModificado_el();
+        }
+        
+        return datos;
     }
 }

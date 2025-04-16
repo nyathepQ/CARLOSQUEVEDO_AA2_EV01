@@ -4,6 +4,7 @@ import javax.swing.JComboBox;
 import javax.swing.JOptionPane;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
+import javax.swing.ListSelectionModel;
 
 /**
  *
@@ -38,6 +39,30 @@ public class MostrarUtils {
         } else {
             JOptionPane.showMessageDialog(null, "Cancelaste la selección.");
             return null;
+        }
+    }
+    
+    public Object crearTabla (String[] columnas, Object[][] datos, String texto_interno, int ancho, int alto) {
+        //crear tabla
+        JTable tabla = new JTable(datos, columnas);
+        tabla.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        
+        //Scroll con tamaño fijo
+        JScrollPane scroll_pane = new JScrollPane(tabla);
+        scroll_pane.setPreferredSize(new java.awt.Dimension(ancho, alto));
+        
+        //mostrar tabla dentro de un optionpane
+        JOptionPane.showMessageDialog(null, scroll_pane, texto_interno, JOptionPane.PLAIN_MESSAGE);
+        
+        //obtener fila seleccionada
+        int fila_seleccionada = tabla.getSelectedRow();
+        
+        if (fila_seleccionada != -1){
+            //obtener el valor de la columna 0 (id)
+            Object idSeleccionado = tabla.getValueAt(fila_seleccionada, 0);
+            return idSeleccionado;
+        } else {
+            return fila_seleccionada;
         }
     }
 }

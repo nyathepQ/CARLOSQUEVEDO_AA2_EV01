@@ -155,7 +155,7 @@ public class EquipoTrabajoManager {
                 
                 ResultSet rs1 = stat1.executeQuery();
                 
-                if(rs1.next()) {
+                while(rs1.next()) {
                     EquipoTrabajo temp = new EquipoTrabajo();
                     temp.setCodigo(rs1.getInt("id_equipo"));
                     temp.setNombre_equipo(rs1.getString("nombre_equipo"));
@@ -284,5 +284,23 @@ public class EquipoTrabajoManager {
             e.printStackTrace();
             return false;
         }
+    }
+    
+    public Object[][] toTableObject (EquipoTrabajo[] equipo){
+        Object[][] datos = new Object[equipo.length][9];
+        
+        for (int i = 0; i < equipo.length; i++) {
+            datos[i][0] = equipo[i].getCodigo();
+            datos[i][1] = equipo[i].getNombre_equipo();
+            datos[i][2] = equipo[i].getLider();
+            datos[i][3] = equipo[i].getMiembro1();
+            datos[i][4] = equipo[i].getMiembro2();
+            datos[i][5] = equipo[i].getUser_crea();
+            datos[i][6] = equipo[i].getCreado_el();
+            datos[i][7] = equipo[i].getUser_modifica();
+            datos[i][8] = equipo[i].getModificado_el();
+        }
+        
+        return datos;
     }
 }

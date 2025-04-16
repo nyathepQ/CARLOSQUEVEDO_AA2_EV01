@@ -88,7 +88,7 @@ public class ClienteManager {
                 
                 ResultSet rs = stat.executeQuery();
                 
-                if(rs.next()) {
+                while(rs.next()) {
                     int codigo = rs.getInt("id_cliente");
                     String nombre = rs.getString("nombre_cliente");
                     String apellido = rs.getString("apellido_cliente");
@@ -161,5 +161,25 @@ public class ClienteManager {
     
     public String ClienteToString(Cliente cliente) {
         return cliente.getNombres() + " " + cliente.getApellidos();
+    }
+    
+    public Object[][] toTableObject (Cliente[] cliente){
+        Object[][] datos = new Object[cliente.length][11];
+        
+        for (int i = 0; i < cliente.length; i++) {
+            datos[i][0] = cliente[i].getCodigo();
+            datos[i][1] = cliente[i].getNombres();
+            datos[i][2] = cliente[i].getApellidos();
+            datos[i][3] = cliente[i].getDireccion();
+            datos[i][4] = cliente[i].getTelefono();
+            datos[i][5] = cliente[i].getEmail();
+            datos[i][6] = cliente[i].getObservaciones();
+            datos[i][7] = cliente[i].getUser_crea();
+            datos[i][8] = cliente[i].getCreado_el();
+            datos[i][9] = cliente[i].getUser_modifica();
+            datos[i][10] = cliente[i].getModificado_el();
+        }
+        
+        return datos;
     }
 }

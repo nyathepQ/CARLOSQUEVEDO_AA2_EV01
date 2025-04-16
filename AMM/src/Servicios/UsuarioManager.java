@@ -91,7 +91,7 @@ public class UsuarioManager {
                 
                 ResultSet rs = stat.executeQuery();
                 
-                if(rs.next()) {
+                while(rs.next()) {
                     String id_usuario = rs.getString("id_usuario");
                     int id_tipoUsua = rs.getInt("id_tipoUsua");
                     String nombre_usuario = rs.getString("nombre_usuario");
@@ -165,5 +165,28 @@ public class UsuarioManager {
     
     public String UsuarioToString (Usuario user){
         return user.getNombres() + " " + user.getApellidos();
+    }
+    
+    public Object[][] toTableObject (Usuario[] usuario){
+        Object[][] datos = new Object[usuario.length][14];
+        
+        for (int i = 0; i < usuario.length; i++) {
+            datos[i][0] = usuario[i].getCodigo();
+            datos[i][1] = usuario[i].getTipo_user();
+            datos[i][2] = usuario[i].getUser();
+            datos[i][3] = usuario[i].getPassword();
+            datos[i][4] = usuario[i].getTipo_docu();
+            datos[i][5] = usuario[i].getDocumento();
+            datos[i][6] = usuario[i].getNombres();
+            datos[i][7] = usuario[i].getApellidos();
+            datos[i][8] = usuario[i].getTelefono();
+            datos[i][9] = usuario[i].getEmail();
+            datos[i][10] = usuario[i].getUser_crea();
+            datos[i][11] = usuario[i].getCreado_el();
+            datos[i][12] = usuario[i].getUser_modifica();
+            datos[i][13] = usuario[i].getModificado_el();
+        }
+        
+        return datos;
     }
 }

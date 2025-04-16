@@ -136,5 +136,20 @@ public class VariosManager {
             e.printStackTrace();
             return false;
         }
-    }   
+    }
+    
+    public Object[][] toTableObject (Varios[] tipos){
+        Object[][] datos = new Object[tipos.length][6];
+        
+        for (int i = 0; i < tipos.length; i++) {
+            datos[i][0] = tipos[i].getCodigo();
+            datos[i][1] = tipos[i].getNombre();
+            datos[i][2] = tipos[i].getUser_crea();
+            datos[i][3] = tipos[i].getCreado_el();
+            datos[i][4] = tipos[i].getUser_modifica();
+            datos[i][5] = tipos[i].getModificado_el();
+        }
+        
+        return datos;
+    }
 }

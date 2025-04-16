@@ -26,38 +26,16 @@ public class MenuManager {
         //opciones
         String texto_interno = "Elige una opción";
         Object[] opciones = {"Servicios", "Clientes", "Usuarios", "Equipos", "Tipos", "Cerrar"};
-        Object[] opciones_servicio = {"Crear", "Editar", "Eliminar", "Volver"};
         Object[] opciones_estandar = {"Crear", "Editar", "Eliminar", "Volver"};
-        Object[] opciones_tipos = {"Tipo documento", "Tipo servicio", "Tipo empleado", "Volver"};
+        Object[] opciones_tipos = {"Tipo documento", "Tipo servicio", "Ver tipos de usuario", "Volver"};
         
-        
-        /*
-        String[] columnas = {"ID", "Nombre", "Edad"};
-
-        // Datos de ejemplo
-        Object[][] datos = {
-            {1, "Ana", 25},
-            {2, "Bruno", 30},
-            {3, "Carlos", 28},
-            {4, "Daniela", 22},
-            {5, "Elena", 27},
-            {6, "Fernando", 35},
-            {7, "Gabriela", 24},
-            {8, "Héctor", 31},
-            {9, "Isabel", 29},
-            {10, "Jorge", 33}
-        };
-
-        mensajesUtil.mostrarTabla(columnas, datos, 400, 200, "Tabla Random");*/
-
-
         int seleccion = mensajesUtil.mostrarOpciones(opciones, texto_interno, "Menu");
         switch (seleccion) {
             case 0:
-                int select_servicio = mensajesUtil.mostrarOpciones(opciones_servicio, texto_interno, "Servicio");
+                int select_servicio = mensajesUtil.mostrarOpciones(opciones_estandar, texto_interno, "Servicio");
                 switch (select_servicio) {
                     case 0:
-                        crearOpt(seleccion);
+                        creaEditOpt(seleccion, false, 0);
                         break;
                     case 1:
                         editarOpt(seleccion);
@@ -75,7 +53,7 @@ public class MenuManager {
                 int select_cliente = mensajesUtil.mostrarOpciones(opciones_estandar, texto_interno, "Cliente");
                 switch (select_cliente) {
                     case 0:
-                        crearOpt(seleccion);
+                        creaEditOpt(seleccion, false, 0);
                         break;
                     case 1:
                         editarOpt(seleccion);
@@ -93,7 +71,7 @@ public class MenuManager {
                 int select_usuario = mensajesUtil.mostrarOpciones(opciones_estandar, texto_interno, "Usuario");
                 switch (select_usuario) {
                     case 0:
-                        crearOpt(seleccion);
+                        creaEditOpt(seleccion, false, 0);
                         break;
                     case 1:
                         editarOpt(seleccion);
@@ -111,7 +89,7 @@ public class MenuManager {
                 int select_equipo = mensajesUtil.mostrarOpciones(opciones_estandar, texto_interno, "Equipo");
                 switch (select_equipo) {
                     case 0:
-                        crearOpt(seleccion);
+                        creaEditOpt(seleccion, false, 0);
                         break;
                     case 1:
                         editarOpt(seleccion);
@@ -131,7 +109,7 @@ public class MenuManager {
                     case 0: //documento
                         int select_tipo_doc = mensajesUtil.mostrarOpciones(opciones_estandar, texto_interno, "Tipo Documento");
                         if(select_tipo_doc == 0){ //crear
-                            crearTipo(select_tipos);
+                            creaEditTipo(select_tipos, false, 0);
                             break;
                         } else if (select_tipo_doc == 1) { //editar
                             editarTipo(select_tipos);
@@ -147,7 +125,7 @@ public class MenuManager {
                     case 1: //servicio
                         int select_tipo_serv = mensajesUtil.mostrarOpciones(opciones_estandar, texto_interno, "Tipo Servicio");
                         if(select_tipo_serv == 0){ //crear
-                            crearTipo(select_tipos);
+                            creaEditTipo(select_tipos, false, 0);
                             break;
                         } else if (select_tipo_serv == 1) { //editar
                             editarTipo(select_tipos);
@@ -181,7 +159,7 @@ public class MenuManager {
         }
     }
     
-    private void crearOpt (int type){
+    private void creaEditOpt (int type, boolean esEditar, int idEdit){
         if(type == 0){ //servicio
             Servicio serv = new Servicio();
             
@@ -311,18 +289,40 @@ public class MenuManager {
             } else {
                 serv.setObservacion(observacion);
             }
-            //user_crea
-            serv.setUser_crea("Admin");
             
-            //insertar
-            boolean crea_serv = serv_manager.insertServicio(serv);
-            if(crea_serv){
-                JOptionPane.showMessageDialog(null, "Creado con exito");
-                mostrarMenu();
+            //crear - editar
+            if(!esEditar){
+                //user_crea
+                serv.setUser_crea("Admin");
+
+                //insertar
+                boolean crea_serv = serv_manager.insertServicio(serv);
+                if(crea_serv){
+                    JOptionPane.showMessageDialog(null, "Creado con exito");
+                    mostrarMenu();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al crear");
+                    mostrarMenu();
+                }
             } else {
-                JOptionPane.showMessageDialog(null, "Error al crear");
-                mostrarMenu();
-            }            
+                //id
+                serv.setId_servicio(idEdit);
+                //user_modifica
+                serv.setUser_modifica("Admin");
+                //modificado_el
+                serv.setModificado_el(timeUtils.getNowTime());
+                
+                //editar
+                boolean edit_serv = serv_manager.modificarServicio(serv);
+                if(edit_serv){
+                    JOptionPane.showMessageDialog(null, "Editado con exito");
+                    mostrarMenu();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al crear");
+                    mostrarMenu();
+                }
+            }
+            
         } else if (type == 1) { //cliente
             Cliente cliente = new Cliente();
             
@@ -368,18 +368,40 @@ public class MenuManager {
                 mostrarMenu();
             }
             cliente.setObservaciones(observacion_cliente);
-            //user_crea
-            cliente.setUser_crea("Admin");
             
-            //insertar
-            boolean crea_cl = cl_manager.insertCliente(cliente);
-            if(crea_cl){
-                JOptionPane.showMessageDialog(null, "Creado con exito");
-                mostrarMenu();
+            //crear - editar
+            if(!esEditar){
+                //user_crea
+                cliente.setUser_crea("Admin");
+
+                //insertar
+                boolean crea_cl = cl_manager.insertCliente(cliente);
+                if(crea_cl){
+                    JOptionPane.showMessageDialog(null, "Creado con exito");
+                    mostrarMenu();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al crear");
+                    mostrarMenu();
+                }            
             } else {
-                JOptionPane.showMessageDialog(null, "Error al crear");
-                mostrarMenu();
-            }            
+                //id
+                cliente.setCodigo(String.valueOf(idEdit));
+                //user modifica
+                cliente.setUser_modifica("Admin");
+                //modificado el
+                cliente.setModificado_el(timeUtils.getNowTime());
+                
+                //editar
+                boolean edit_cl = cl_manager.modificarCliente(cliente);
+                if(edit_cl) {
+                    JOptionPane.showMessageDialog(null, "Editado con exito");
+                    mostrarMenu();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al crear");
+                    mostrarMenu();
+                }
+            }
+            
         } else if (type == 2) { //usuarios
             Usuario user = new Usuario();
             
@@ -458,18 +480,39 @@ public class MenuManager {
                 mostrarMenu();
             }
             user.setEmail(correo_usuario);
-            //user_crea
-            user.setUser("Admin");
             
-            //insertar
-            boolean crea_user = user_manager.insertUsuario(user);
-            if (crea_user) {
-                JOptionPane.showMessageDialog(null, "Creado con exito");
-                mostrarMenu();
+            //crear - editar
+            if(!esEditar) {
+                //user_crea
+                user.setUser("Admin");            
+            
+                boolean crea_user = user_manager.insertUsuario(user);
+                if (crea_user) {
+                    JOptionPane.showMessageDialog(null, "Creado con exito");
+                    mostrarMenu();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al crear");
+                    mostrarMenu();
+                }
             } else {
-                JOptionPane.showMessageDialog(null, "Error al crear");
-                mostrarMenu();
+                //id
+                user.setCodigo(String.valueOf(idEdit));
+                //user_modifica
+                user.setUser_modifica("Admin");
+                //modificado_el
+                user.setModificado_el(timeUtils.getNowTime());
+                
+                //editar
+                boolean edit_user = user_manager.modificarUsuario(user);
+                if (edit_user) {
+                    JOptionPane.showMessageDialog(null, "Editado con exito");
+                    mostrarMenu();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al crear");
+                    mostrarMenu();
+                }                
             }
+            
         } else if (type == 3) { //equipo
             EquipoTrabajo equi = new EquipoTrabajo();
             
@@ -480,8 +523,17 @@ public class MenuManager {
                 mostrarMenu();
             }
             equi.setNombre_equipo(nombre_equipo);
-            //user_crea
-            equi.setUser_crea("Admin");
+            
+            if(!esEditar){
+                //user_crea
+                equi.setUser_crea("Admin");
+            } else {
+                //user_modifica
+                equi.setUser_modifica("Admin");
+                //modificado_el
+                equi.setModificado_el(timeUtils.getNowTime());
+            }
+            
             //lider
             Usuario[] usuarios = user_manager.getAllUsuario();
             Object[] listaUsuario = new Object[usuarios.length];
@@ -512,43 +564,328 @@ public class MenuManager {
                 }
             }
             
-            //insertar
-            boolean crea_equipo = eq_manager.insertEquipo(equi);
-            if (crea_equipo) {
-                JOptionPane.showMessageDialog(null, "Creado con exito");
-                mostrarMenu();
+            //crear - editar
+            if(!esEditar){
+                boolean crea_equipo = eq_manager.insertEquipo(equi);
+                if (crea_equipo) {
+                    JOptionPane.showMessageDialog(null, "Creado con exito");
+                    mostrarMenu();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al crear");
+                    mostrarMenu();
+                }
             } else {
-                JOptionPane.showMessageDialog(null, "Error al crear");
-                mostrarMenu();
+                boolean edit_equipo = eq_manager.modificarEquipo(equi);
+                if (edit_equipo) {
+                    JOptionPane.showMessageDialog(null, "Editado con exito");
+                    mostrarMenu();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al crear");
+                    mostrarMenu();
+                }
             }
         }
     }
     
     private void editarOpt (int type){
-        
+        if(type == 0){//servicio
+            Servicio[] servicio = serv_manager.getAllServicio();
+            String[] Columnas = {"ID", "Cliente", "Equipo", "Tipo limpieza", "Fecha", "Hora", "Tiempo estimado", "Hora finalizacion", "Precio", "Observaciones", "Creado por", "Creado el", "Modificado por", "Modificado el"};
+            Object[][] datos_tabla = serv_manager.toTableObject(servicio);
+            Object editar = mensajesUtil.crearTabla(Columnas, datos_tabla, "Seleccione el item a editar", 900, 500);
+            if(editar.equals(-1)){
+                JOptionPane.showMessageDialog(null, "Cancelado");
+                mostrarMenu();
+            } else {
+                creaEditOpt(type, true, Integer.parseInt((String)editar));
+            }
+        } else if (type == 1){ //cliente
+            Cliente[] clientes = cl_manager.getAllCliente();
+            String[] Columnas = {"ID", "Nombres", "Apellidos", "Direccion", "Telefono", "Correo electronico", "Observaciones", "Creado por", "Creado el", "Modificado por", "Modificado el"};
+            Object[][] datos_tabla = cl_manager.toTableObject(clientes);
+            Object editar = mensajesUtil.crearTabla(Columnas, datos_tabla, "Seleccione el item a editar", 900, 500);
+            if(editar.equals(-1)){
+                JOptionPane.showMessageDialog(null, "Cancelado");
+                mostrarMenu();
+            } else {
+                creaEditOpt(type, true, Integer.parseInt((String)editar));
+            }
+        } else if (type == 2) { //usuarios
+            Usuario[] usuarios = user_manager.getAllUsuario();
+            String[] Columnas = {"ID", "Tipo Usuario", "Usuario", "Contraseña", "Tipo documento", "Documento", "Nombres", "Apellidos", "Telefono", "Correo electronico", "Creado por", "Creado el", "Modificado por", "Modificado el"};
+            Object[][] datos_tabla = user_manager.toTableObject(usuarios);
+            Object editar = mensajesUtil.crearTabla(Columnas, datos_tabla, "Seleccione el item a editar", 900, 500);
+            if(editar.equals(-1)){
+                JOptionPane.showMessageDialog(null, "Cancelado");
+                mostrarMenu();
+            } else {
+                creaEditOpt(type, true, Integer.parseInt((String)editar));
+            }
+        } else if (type == 3) { //equipo
+            EquipoTrabajo[] equipos = eq_manager.getAllEquipo();
+            String[] Columnas = {"ID", "Nombre", "Lider", "Miembro", "Miembro", "Creado por", "Creado el", "Modificado por", "Modificado el"};
+            Object[][] datos_tabla = eq_manager.toTableObject(equipos);
+            Object editar = mensajesUtil.crearTabla(Columnas, datos_tabla, "Seleccione el item a editar", 900, 500);
+            if(editar.equals(-1)){
+                JOptionPane.showMessageDialog(null, "Cancelado");
+                mostrarMenu();
+            } else {
+                creaEditOpt(type, true, Integer.parseInt((String)editar));
+            }
+        }
     }
     
     private void eliminarOpt (int type) {
-        
+        if(type == 0) {//servicio
+            Servicio[] servicio = serv_manager.getAllServicio();
+            String[] Columnas = {"ID", "Cliente", "Equipo", "Tipo limpieza", "Fecha", "Hora", "Tiempo estimado", "Hora finalizacion", "Precio", "Observaciones", "Creado por", "Creado el", "Modificado por", "Modificado el"};
+            Object[][] datos_tabla = serv_manager.toTableObject(servicio);
+            Object eliminar = mensajesUtil.crearTabla(Columnas, datos_tabla, "Seleccione el item a eliminar", 900, 500);
+            if(eliminar.equals(-1)){
+                JOptionPane.showMessageDialog(null, "Cancelado");
+                mostrarMenu();
+            } else {
+                boolean elim = serv_manager.eliminarServicio(Integer.parseInt((String) eliminar));
+                if (elim) {
+                    JOptionPane.showMessageDialog(null, "Eliminado con exito");
+                    mostrarMenu();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al eliminar");
+                    mostrarMenu();
+                }
+            }
+        } else if (type == 1){ //cliente
+            Cliente[] clientes = cl_manager.getAllCliente();
+            String[] Columnas = {"ID", "Nombres", "Apellidos", "Direccion", "Telefono", "Correo electronico", "Observaciones", "Creado por", "Creado el", "Modificado por", "Modificado el"};
+            Object[][] datos_tabla = cl_manager.toTableObject(clientes);
+            Object eliminar = mensajesUtil.crearTabla(Columnas, datos_tabla, "Seleccione el item a eliminar", 900, 500);
+            if(eliminar.equals(-1)){
+                JOptionPane.showMessageDialog(null, "Cancelado");
+                mostrarMenu();
+            } else {
+                boolean elim = cl_manager.eliminarCliente(Integer.parseInt((String) eliminar));
+                if (elim) {
+                    JOptionPane.showMessageDialog(null, "Eliminado con exito");
+                    mostrarMenu();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al eliminar");
+                    mostrarMenu();
+                }
+            }
+        } else if (type == 2) { //usuarios
+            Usuario[] usuarios = user_manager.getAllUsuario();
+            String[] Columnas = {"ID", "Tipo Usuario", "Usuario", "Contraseña", "Tipo documento", "Documento", "Nombres", "Apellidos", "Telefono", "Correo electronico", "Creado por", "Creado el", "Modificado por", "Modificado el"};
+            Object[][] datos_tabla = user_manager.toTableObject(usuarios);
+            Object eliminar = mensajesUtil.crearTabla(Columnas, datos_tabla, "Seleccione el item a eliminar", 900, 500);
+            if(eliminar.equals(-1)){
+                JOptionPane.showMessageDialog(null, "Cancelado");
+                mostrarMenu();
+            } else {
+                boolean elim = user_manager.eliminarUsuario((String) eliminar);
+                if (elim) {
+                    JOptionPane.showMessageDialog(null, "Eliminado con exito");
+                    mostrarMenu();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al eliminar");
+                    mostrarMenu();
+                }
+            }
+        } else if (type == 3) { //equipo
+            EquipoTrabajo[] equipos = eq_manager.getAllEquipo();
+            String[] Columnas = {"ID", "Nombre", "Lider", "Miembro", "Miembro", "Creado por", "Creado el", "Modificado por", "Modificado el"};
+            Object[][] datos_tabla = eq_manager.toTableObject(equipos);
+            Object eliminar = mensajesUtil.crearTabla(Columnas, datos_tabla, "Seleccione el item a editar", 900, 500);
+            if(eliminar.equals(-1)){
+                JOptionPane.showMessageDialog(null, "Cancelado");
+                mostrarMenu();
+            } else {
+                boolean elim = eq_manager.eliminarEquipo(Integer.parseInt((String) eliminar));
+                if (elim) {
+                    JOptionPane.showMessageDialog(null, "Eliminado con exito");
+                    mostrarMenu();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al eliminar");
+                    mostrarMenu();
+                }
+            }
+        }
     }
     
-    private void crearTipo (int type){
+    private void creaEditTipo (int type, boolean esEditar, int idEdit){
         if(type == 0) { //tipo documento
+            Varios tipo_docu = new Varios();
+            String tabla_name = "tipo_documento";
+            String id_name = "id_tipoDocu";
+            //nombre tipo
+            String nombre_tipo = JOptionPane.showInputDialog(null, "Nombre tipo de documento");
+            if (nombre_tipo == null){
+                JOptionPane.showMessageDialog(null, "Cancelado");
+                mostrarMenu();
+            }
+            tipo_docu.setNombre(nombre_tipo);
+            
+            if(!esEditar){
+                //user crea
+                tipo_docu.setUser_crea("Admin");
+                    
+                //insertar
+                boolean insert = tipos_manager.insertTipoVarios(tabla_name, tipo_docu);
+                if(insert){
+                    JOptionPane.showMessageDialog(null, "Creado con exito");
+                    mostrarMenu();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al crear");
+                    mostrarMenu();
+                }
+            } else {
+                //id
+                tipo_docu.setCodigo(idEdit);
+                //user modifica
+                tipo_docu.setUser_modifica("Admin");
+                //fecha modificado
+                tipo_docu.setModificado_el(timeUtils.getNowTime());
+                
+                //editar
+                boolean modify = tipos_manager.modificarTipoVarios(tabla_name, id_name, tipo_docu);
+                if(modify){
+                    JOptionPane.showMessageDialog(null, "Creado con exito");
+                    mostrarMenu();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al crear");
+                    mostrarMenu();
+                }
+            }
             
         } else if (type == 1) { //tipo servicio
+            Varios tipo_limpieza = new Varios();
+            String tabla_name = "tipo_limpieza";
+            String id_name = "id_tipoLimp";
+            //nombre tipo
+            String nombre_tipo = JOptionPane.showInputDialog(null, "Nombre tipo de servicio");
+            if (nombre_tipo == null){
+                JOptionPane.showMessageDialog(null, "Cancelado");
+                mostrarMenu();
+            }
+            tipo_limpieza.setNombre(nombre_tipo);
             
+            if(!esEditar){
+                //user crea
+                tipo_limpieza.setUser_crea("Admin");
+                    
+                //insertar
+                boolean insert = tipos_manager.insertTipoVarios(tabla_name, tipo_limpieza);
+                if(insert){
+                    JOptionPane.showMessageDialog(null, "Creado con exito");
+                    mostrarMenu();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al crear");
+                    mostrarMenu();
+                }
+            } else {
+                //id
+                tipo_limpieza.setCodigo(idEdit);
+                //user modifica
+                tipo_limpieza.setUser_modifica("Admin");
+                //fecha modificado
+                tipo_limpieza.setModificado_el(timeUtils.getNowTime());
+                
+                //editar
+                boolean modify = tipos_manager.modificarTipoVarios(tabla_name, id_name, tipo_limpieza);
+                if(modify){
+                    JOptionPane.showMessageDialog(null, "Creado con exito");
+                    mostrarMenu();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al crear");
+                    mostrarMenu();
+                }
+            }
         }
     }
     
     private void editarTipo (int type){
-        
+        if(type == 0) { //tipo documento
+            String tabla_name = "tipo_documento";
+            String id_name = "id_tipoDocu";
+            String colum_name = "Tipo documento";
+            Varios[] tipo_docu = tipos_manager.getAllTipoVarios(tabla_name, id_name);
+            String[] Columnas = {"ID", colum_name, "Creado por", "Creado el", "Modificado por", "Modificado el"};
+            Object[][] datos_tabla = tipos_manager.toTableObject(tipo_docu);
+            Object editar = mensajesUtil.crearTabla(Columnas, datos_tabla, "Seleccione el item a editar", 900, 500);
+            if(editar.equals(-1)){
+                JOptionPane.showMessageDialog(null, "Cancelado");
+                mostrarMenu();
+            } else {
+                creaEditTipo(type, true, Integer.parseInt((String)editar));
+            }
+        } else if (type == 1) { //tipo servicio
+            String tabla_name = "tipo_limpieza";
+            String id_name = "id_tipoLimp";
+            String colum_name = "Tipo limpieza";
+            Varios[] tipo_docu = tipos_manager.getAllTipoVarios(tabla_name, id_name);
+            String[] Columnas = {"ID", colum_name, "Creado por", "Creado el", "Modificado por", "Modificado el"};
+            Object[][] datos_tabla = tipos_manager.toTableObject(tipo_docu);
+            Object editar = mensajesUtil.crearTabla(Columnas, datos_tabla, "Seleccione el item a editar", 900, 500);
+            if(editar.equals(-1)){
+                JOptionPane.showMessageDialog(null, "Cancelado");
+                mostrarMenu();
+            } else {
+                creaEditTipo(type, true, Integer.parseInt((String)editar));
+            }
+        }
     }
     
     private void eliminarTipo (int type) {
-        
+        if(type == 0) { //tipo documento
+            String tabla_name = "tipo_documento";
+            String id_name = "id_tipoDocu";
+            String colum_name = "Tipo documento";
+            Varios[] tipo_docu = tipos_manager.getAllTipoVarios(tabla_name, id_name);
+            String[] Columnas = {"ID", colum_name, "Creado por", "Creado el", "Modificado por", "Modificado el"};
+            Object[][] datos_tabla = tipos_manager.toTableObject(tipo_docu);
+            Object eliminar = mensajesUtil.crearTabla(Columnas, datos_tabla, "Seleccione el item a eliminar", 900, 500);
+            if(eliminar.equals(-1)){
+                JOptionPane.showMessageDialog(null, "Cancelado");
+                mostrarMenu();
+            } else {
+                boolean elim = tipos_manager.eliminarTipoVarios(tabla_name, id_name, Integer.parseInt((String)eliminar));
+                if(elim) {
+                    JOptionPane.showMessageDialog(null, "Eliminado con exito");
+                    mostrarMenu();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al eliminar");
+                    mostrarMenu();
+                }
+            }
+        } else if (type == 1) { //tipo servicio
+            String tabla_name = "tipo_limpieza";
+            String id_name = "id_tipoLimp";
+            String colum_name = "Tipo limpieza";
+            Varios[] tipo_docu = tipos_manager.getAllTipoVarios(tabla_name, id_name);
+            String[] Columnas = {"ID", colum_name, "Creado por", "Creado el", "Modificado por", "Modificado el"};
+            Object[][] datos_tabla = tipos_manager.toTableObject(tipo_docu);
+            Object eliminar = mensajesUtil.crearTabla(Columnas, datos_tabla, "Seleccione el item a editar", 900, 500);
+            if(eliminar.equals(-1)){
+                JOptionPane.showMessageDialog(null, "Cancelado");
+                mostrarMenu();
+            } else {
+                boolean elim = tipos_manager.eliminarTipoVarios(tabla_name, id_name, Integer.parseInt((String)eliminar));
+                if(elim) {
+                    JOptionPane.showMessageDialog(null, "Eliminado con exito");
+                    mostrarMenu();
+                } else {
+                    JOptionPane.showMessageDialog(null, "Error al eliminar");
+                    mostrarMenu();
+                }
+            }
+        }
     }
     
     private void mostrarTipoEmpleado () {
-        
+        Varios[] tipo_docu = tipos_manager.getAllTipoVarios("tipo_usuario", "id_tipoUsua");
+        String[] Columnas = {"ID", "Tipo usuario", "Creado por", "Creado el", "Modificado por", "Modificado el"};
+        Object[][] datos_tabla = tipos_manager.toTableObject(tipo_docu);
+        Object mostrar = mensajesUtil.crearTabla(Columnas, datos_tabla, "Tipos de usuario", 900, 500);
+        System.out.println(mostrar);
+        mostrarMenu();
     }
 }
